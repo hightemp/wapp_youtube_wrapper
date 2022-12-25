@@ -184,7 +184,7 @@ def index():
         cur.execute("INSERT INTO update_queue (youtube_search_words_id, update_status) VALUES (?, 0)", (sID,))
         get_db().commit()
         fnUpdateQueue()
-        redirect("/")
+        redirect("/", 307)
     if "remove-word" in request.args:
         aWords = request.args.getlist("words[]")
         for sWord in aWords:
@@ -193,12 +193,12 @@ def index():
             get_db().execute("DELETE FROM update_queue WHERE youtube_search_words_id = ?", (sID,))
             get_db().execute("DELETE FROM youtube_search_words WHERE name = ?", (sWord,))
         get_db().commit()
-        redirect("/")
+        redirect("/", 307)
     if "update-all-word" in request.args:
         get_db().execute("UPDATE update_queue SET update_status=0")
         get_db().commit()
         fnUpdateQueue()
-        redirect("/")
+        redirect("/", 307)
 
     aSearchWords = query_db('SELECT * FROM youtube_search_words')
 
