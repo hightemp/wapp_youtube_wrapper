@@ -19,6 +19,7 @@ from py_youtube import Search
 app = Flask(__name__)
 
 DATABASE = './database.db'
+SCHEDULER_TIMEOUT_MIN=30
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -90,7 +91,7 @@ def fnUpdateQueue():
                 get_db().commit()
 
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(fnUpdateQueue,'interval',minutes=30)
+sched.add_job(fnUpdateQueue,'interval',minutes=SCHEDULER_TIMEOUT_MIN)
 sched.start()
 
 @app.route("/queue", methods=['GET', 'POST'])
