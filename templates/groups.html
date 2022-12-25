@@ -1,0 +1,48 @@
+{% import "macros.html" as macros %}
+{% include "b_header.html" %}
+
+<div class="wrapper">
+    <div class="left-panel">
+        <div class="btn-group">
+            <a href="/" class="btn btn-success">Иконки</a>
+            <a href="/groups" class="btn btn-secondary">Группы</a>
+        </div>
+        <div class="list-group left-panel-list">
+            {% for oGroup in aSavedGroups %}
+                <div class="input-group tab-row">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="checkbox" value="" name="tabs[{{oGroup[0]}}]" />
+                    </div>
+                    <a 
+                        class="list-group-item list-group-item-action {{ 'active' if oGroup[0]|string == sSelSavedGroup|string }} " 
+                        href="?sSelSavedGroup={{ oGroup[0] }}"
+                    >
+                        {{ oGroup[1] }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="right-panel">
+        {% if sSelSavedGroup %}
+        <form action="">
+            <input type="hidden" name="sSelGroup" value="{{sSelGroup}}">
+            <input type="hidden" name="sSelIcon" value="{{sSelIcon}}">
+            <input type="hidden" name="sSelSavedGroup" value="{{sSelSavedGroup}}">
+            <input type="hidden" name="sSelSavedIcon" value="{{sSelSavedIcon}}">
+            <div class="actions-panel">
+                <div class="btn-group group-panel" role="group" aria-label="Basic example">
+                    <label>{{sCurGroup}}</label>
+                    <button class="btn btn-success" type="submit" name="action" value="icon_add_group">Добавить группу</button>
+                    <button class="btn btn-danger" type="submit" name="action" value="icon_remove_group">Удалить группу</button>
+                    <button class="btn btn-danger" type="submit" name="action" value="icon_remove_from_group">Удалить</button>
+                    {{ macros.dropdown(aExports, "Экспорт") }}
+                </div>
+            </div>
+            {{ macros.icons_list(aSavedIcons, 5) }}
+        </form>
+        {% endif %}
+    </div>
+</div>
+
+{% include "b_footer.html" %}

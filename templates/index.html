@@ -1,0 +1,45 @@
+{% import "macros.html" as macros %}
+{% include "b_header.html" %}
+
+<form action="">
+<div class="wrapper">
+    <div class="search-panel">
+            <div class="input-group">
+                <span class="input-group-text" id="basic-addon1">Поиск:</span>
+                <input type="text" class="form-control" name="word" placeholder="..." aria-label="" aria-describedby="basic-addon1">
+                <button class="btn btn-secondary" type="submit" name="filter-word" value="1" id="filter-word">Фильтровать</button>
+                <button class="btn btn-success" type="submit" name="add-word" value="1" id="add-word">Добавить</button>
+                <button class="btn btn-danger" type="submit" name="remove-word" value="1" id="remove-word">Удалить</button>
+                <button class="btn btn-secondary" type="submit" name="update-all-word" value="1" id="update-all-word">Обновить все</button>
+                <a href="/" class="btn btn-primary">Обновить</a>
+                <a href="/queue" class="btn btn-primary">Очередь</a>
+            </div>
+    </div>
+    <div class="youtube-list list-group left-panel-list">
+        {% for sWord, aList in dYoutubeWordsLinks.items() %}
+            <div class="input-group word-row">
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="checkbox" value="{{ sWord }}" name="words[]" />
+                </div>
+                <a href="videos/{{ sWord }}" class="list-group-item list-group-item-action" name="word" value="{{ sWord }}">
+                    {{ sWord }}
+                </a>
+
+                <div class="video-list">
+                    <div class="list">
+                    {% for oItem in aList %}
+                        <a href="https://www.youtube.com/watch?v={{oItem[2]}}">
+                            <img src="https://img.youtube.com/vi/{{oItem[2]}}/0.jpg" alt="" srcset="">
+                        </a>
+                    {% endfor %}
+                    </div>
+                </div>    
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+</form>
+
+
+{% include "b_footer.html" %}

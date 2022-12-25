@@ -1,0 +1,20 @@
+{% include "b_header.html" %}
+
+<div class="container">
+    <form action="" method="get">
+        <div class="mb-3">
+            <label for="name" class="form-label">Название</label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="">
+        </div>
+
+        <div class="d-grid gap-2 d-md-block">
+            <button class="btn btn-success" name="action" value="accept_save_group" type="submit">OK</button>
+            <button class="btn btn-danger" name="action" value="cancel" type="submit">Отмена</button>
+        </div>
+
+        <input type="hidden" id="sSelected" name="sSelected" value="{{sSelected}}" />
+    </form>
+</div>
+
+{% include "b_footer.html" %}
+
