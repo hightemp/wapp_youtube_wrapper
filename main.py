@@ -1,5 +1,5 @@
 # encode: utf-8
-from flask import g, Flask, render_template, request, send_file, redirect, session, jsonify
+from flask import g, Flask, request, send_file, redirect, session, jsonify
 import os
 import re
 import sqlite3
@@ -14,12 +14,41 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 
-from py_youtube import Search
+from flask import Response
+import importlib.resources
+import jinja2
+from jinja2 import Template, FunctionLoader, Environment, BaseLoader
+from flask import Flask
+import mimetypes
 
 app = Flask(__name__)
 
 DATABASE = './database.db'
 SCHEDULER_TIMEOUT_MIN=30
+
+import zipfile
+
+def readfile(sFilePath):
+    with zipfile.ZipFile(os.path.dirname(__file__)) as z:
+        # print(z.namelist())
+        with z.open(sFilePath) as f:
+            print("[!] "+f.name)
+            # print("[!] "+f.read().decode("utf-8"))
+            return f.read()
+    return "ERROR"
+
+# def readfile(sFilePath, sBasePath=__package__):
+#     return importlib.resources.read_text(sBasePath, sFilePath)
+
+def load_template(name):
+    return readfile("templates/"+name).decode("utf-8")
+
+oTempFunctionLoader = FunctionLoader(load_template)
+
+def render_template(name, **kwargs):
+    data = load_template(name)
+    tpl = Environment(loader=oTempFunctionLoader).from_string(data)
+    return tpl.render(**kwargs)
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -128,6 +157,12 @@ def queue():
     return render_template('queue.html',
         aQueue=aQueue,
     )
+
+@app.route("/static_dyn/<path:path>", methods=['GET', 'POST'])
+def static_dyn(path):
+    oR = Response(readfile("static/"+path), mimetype=mimetypes.guess_type(path)[0])
+    oR.headers['Cache-Control'] = 'max-age=60480000, stale-if-error=8640000, must-revalidate'
+    return oR
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
