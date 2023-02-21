@@ -1,5 +1,7 @@
 # wapp_youtube_wrapper
 
+![](https://asdertasd.site/counter/wapp_youtube_wrapper)
+
 Среда для поиска видеороликов по ключевым словам.
 
 Сделано с использованием zipapp. Для нормальной работы надо запускать pyz.
